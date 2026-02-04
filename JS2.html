@@ -67,7 +67,7 @@
             }
         }
     </style>
-    <title>Document</title>
+    <title>作業2</title>
 </head>
 
 <body>
@@ -158,23 +158,19 @@
         addHeader('Average');
         addHeader('Rank');
 
-        // 3. 計算平均 + 樣式處理
         const results = dataRows.map(row => {
             const cols = row.querySelectorAll('.col');
             let sum = 0;
 
-            // costA ~ costD
             for (let i = 2; i <= 5; i++) {
                 const score = parseInt(cols[i].innerText);
                 sum += score;
 
-                // 不及格：紅字
                 if (score < 60) {
                     cols[i].style.color = '#ff4d4d';
                     cols[i].style.fontWeight = 'bold';
                 }
 
-                // 滿分：金色底
                 if (score === 100) {
                     cols[i].style.backgroundColor = 'gold';
                 }
@@ -182,7 +178,6 @@
 
             const avg = (sum / 4).toFixed(1);
 
-            // 新增平均欄位
             const avgCol = document.createElement('div');
             avgCol.className = 'col';
             avgCol.innerText = avg;
@@ -191,7 +186,6 @@
             return { row, avg: Number(avg) };
         });
 
-        // 4. 排名（同分同名次）
         const sorted = [...results].sort((a, b) => b.avg - a.avg);
 
         results.forEach(item => {

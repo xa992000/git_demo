@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <title>作業1</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        img {
+            border-radius: 50%;
+            width: 150px;
+        }
+
+        button {
+            margin: 10px;
+            padding: 8px 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>使用者資料</h2>
+
+    <img id="avatar" src="" alt="">
+    <p id="name"></p>
+    <p id="email"></p>
+
+    <button id="prevBtn">上一個</button>
+    <button id="nextBtn">下一個</button>
+
+    <script>
+        const users = [];
+        let currentIndex = 0;
+
+        fetch("https://randomuser.me/api/?results=5")
+            .then(res => res.json())
+            .then(data => {
+                data.results.forEach(user => {
+                    users.push({
+                        photo: user.picture.large,
+                        name: `${user.name.first} ${user.name.last}`,
+                        email: user.email
+                    });
+                });
+
+                renderUser();
+            });
+
+        function renderUser() {
+            const user = users[currentIndex];
+            document.getElementById("avatar").src = user.photo;
+            document.getElementById("name").textContent = user.name;
+            document.getElementById("email").textContent = user.email;
+        }
+
+        document.getElementById("nextBtn").addEventListener("click", () => {
+            currentIndex++;
+            if (currentIndex >= users.length) {
+                currentIndex = 0;
+            }
+            renderUser();
+        });
+
+        document.getElementById("prevBtn").addEventListener("click", () => {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = users.length - 1;
+            }
+            renderUser();
+        });
+    </script>
+
+</body>
+
+</html>
