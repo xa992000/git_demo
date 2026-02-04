@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html,
+        body,
+        section {
+            height: 100%;
+        }
+
+        body {
+            background-color: #dde2eb;
+        }
+
+        section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        article {
+            min-width: 400px;
+            min-height: 100px;
+            background-color: #79aaf7;
+            border-radius: 5px;
+            display: block;
+            padding: 10px;
+            font-size: 24px;
+        }
+
+        .container {
+            .row {
+                display: flex;
+                margin-bottom: 2px;
+
+                .col {
+                    width: 100px;
+                    text-align: center;
+                    margin-right: 2px;
+
+                    &:nth-child(1) {
+                        width: 50px;
+                    }
+                }
+
+                &:nth-child(odd) {
+                    .col {
+                        background-color: rgba(255, 255, 255, 0.2);
+                    }
+                }
+
+                &:nth-child(even) {
+                    .col {
+                        background-color: rgba(255, 255, 255, 0.4);
+                    }
+                }
+
+                &:nth-child(1) {
+                    .col {
+                        background-color: rgba(255, 255, 255, 0.8);
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <section>
+        <article>
+            <div class="container">
+                <div class="row">
+                    <div class="col">#</div>
+                    <div class="col">Name</div>
+                    <div class="col">costA</div>
+                    <div class="col">costB</div>
+                    <div class="col">costC</div>
+                    <div class="col">costD</div>
+                </div>
+                <div class="row">
+                    <div class="col">1</div>
+                    <div class="col">吳穎伯</div>
+                    <div class="col">90</div>
+                    <div class="col">80</div>
+                    <div class="col">95</div>
+                    <div class="col">90</div>
+                </div>
+                <div class="row">
+                    <div class="col">2</div>
+                    <div class="col">王家佑</div>
+                    <div class="col">95</div>
+                    <div class="col">88</div>
+                    <div class="col">58</div>
+                    <div class="col">93</div>
+                </div>
+                <div class="row">
+                    <div class="col">3</div>
+                    <div class="col">洪奕銘</div>
+                    <div class="col">52</div>
+                    <div class="col">65</div>
+                    <div class="col">76</div>
+                    <div class="col">45</div>
+                </div>
+                <div class="row">
+                    <div class="col">4</div>
+                    <div class="col">許佳伶</div>
+                    <div class="col">88</div>
+                    <div class="col">76</div>
+                    <div class="col">81</div>
+                    <div class="col">60</div>
+                </div>
+                <div class="row">
+                    <div class="col">5</div>
+                    <div class="col">王佩芸</div>
+                    <div class="col">100</div>
+                    <div class="col">100</div>
+                    <div class="col">100</div>
+                    <div class="col">100</div>
+                </div>
+                <div class="row">
+                    <div class="col">6</div>
+                    <div class="col">林奎聖</div>
+                    <div class="col">85</div>
+                    <div class="col">80</div>
+                    <div class="col">89</div>
+                    <div class="col">90</div>
+                </div>
+                <div class="row">
+                    <div class="col">7</div>
+                    <div class="col">張剛皓</div>
+                    <div class="col">35</div>
+                    <div class="col">28</div>
+                    <div class="col">60</div>
+                    <div class="col">67</div>
+                </div>
+
+
+            </div>
+        </article>
+    </section>
+    <script>
+        const allRows = Array.from(document.querySelectorAll('.container .row'));
+        const headerRow = allRows[0];
+        const dataRows = allRows.slice(1);
+
+        function addHeader(text) {
+            const col = document.createElement('div');
+            col.className = 'col';
+            col.innerText = text;
+            headerRow.appendChild(col);
+        }
+
+        addHeader('Average');
+        addHeader('Rank');
+
+        // 3. 計算平均 + 樣式處理
+        const results = dataRows.map(row => {
+            const cols = row.querySelectorAll('.col');
+            let sum = 0;
+
+            // costA ~ costD
+            for (let i = 2; i <= 5; i++) {
+                const score = parseInt(cols[i].innerText);
+                sum += score;
+
+                // 不及格：紅字
+                if (score < 60) {
+                    cols[i].style.color = '#ff4d4d';
+                    cols[i].style.fontWeight = 'bold';
+                }
+
+                // 滿分：金色底
+                if (score === 100) {
+                    cols[i].style.backgroundColor = 'gold';
+                }
+            }
+
+            const avg = (sum / 4).toFixed(1);
+
+            // 新增平均欄位
+            const avgCol = document.createElement('div');
+            avgCol.className = 'col';
+            avgCol.innerText = avg;
+            row.appendChild(avgCol);
+
+            return { row, avg: Number(avg) };
+        });
+
+        // 4. 排名（同分同名次）
+        const sorted = [...results].sort((a, b) => b.avg - a.avg);
+
+        results.forEach(item => {
+            const rank = sorted.findIndex(r => r.avg === item.avg) + 1;
+            const rankCol = document.createElement('div');
+            rankCol.className = 'col';
+            rankCol.innerText = rank;
+            item.row.appendChild(rankCol);
+        });
+    </script>
+
+</body>
+
+</html>
